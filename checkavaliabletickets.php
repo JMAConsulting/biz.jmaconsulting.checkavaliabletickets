@@ -166,7 +166,7 @@ function checkavaliabletickets_civicrm_preProcess($formName, &$form) {
     if ($formName === 'CRM_Event_Form_Registration_Register') {
       $sessionCount = 1;
     }
-    if ($formName === 'CRM_Event_Form_Registration_Register' || $$formName === 'CRM_Event_Form_Registration_Confirm') {
+    if ($formName === 'CRM_Event_Form_Registration_Register' || $formName === 'CRM_Event_Form_Registration_Confirm') {
       $fullCheck = CRM_Checkavaliabletickets_BAO_EventHoldingTickets::isEventFull($form->_eventId, $sessionCount);
       if ($fullCheck) {
         $event = civicrm_api3('Event', 'getsingle', ['id' => $form->_eventId]);
