@@ -473,5 +473,11 @@ function _checkavaliabletickets_civix_civicrm_alterSettingsFolders(&$metaDataFol
 
 function _checkavaliabletickets_civix_civicrm_entityTypes(&$entityTypes) {
   $entityTypes = array_merge($entityTypes, array (
+    'CRM_Checkavaliabletickets_DAO_EventHoldingTickets' => 
+    array (
+      'name' => 'EventHoldingTickets',
+      'class' => 'CRM_Checkavaliabletickets_DAO_EventHoldingTickets',
+      'table' => 'civicrm_event_holding_tickets',
+    ),
   ));
 }

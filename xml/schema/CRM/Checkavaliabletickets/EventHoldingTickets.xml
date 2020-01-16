@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="iso-8859-1" ?>
+
+<table>
+  <base>CRM/Checkavaliabletickets</base>
+  <class>EventHoldingTickets</class>
+  <name>civicrm_event_holding_tickets</name>
+  <comment>Table to hold a count of the number of tickets currently being held</comment>
+  <log>true</log>
+
+  <field>
+    <name>id</name>
+    <type>int unsigned</type>
+    <required>true</required>
+    <comment>Unique EventHoldingTickets ID</comment>
+  </field>
+  <primaryKey>
+    <name>id</name>
+    <autoincrement>true</autoincrement>
+  </primaryKey>
+
+  <field>
+    <name>event_id</name>
+    <type>int unsigned</type>
+    <comment>FK to CiviCRM Event</comment>
+  </field>
+  <index>
+    <name>UI_event_id</name>
+    <fieldName>event_id</fieldName>
+    <unique>true</unique>
+  </index>
+  <foreignKey>
+    <name>event_id</name>
+    <table>civicrm_event</table>
+    <key>id</key>
+    <onDelete>CASCADE</onDelete>
+  </foreignKey>
+  <field>
+    <name>number_holding_tickets</name>
+    <type>int</type>
+    <comment>Column to hold the number of tickets currently in transaction</comment>
+  </field>
+
+</table>

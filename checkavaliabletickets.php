@@ -141,30 +141,83 @@ function checkavaliabletickets_civicrm_themes(&$themes) {
   _checkavaliabletickets_civix_civicrm_themes($themes);
 }
 
-// --- Functions below this ship commented out. Uncomment as required. ---
-
-/**
- * Implements hook_civicrm_preProcess().
- *
- * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_preProcess
- *
 function checkavaliabletickets_civicrm_preProcess($formName, &$form) {
-
-} // */
+  if ($formName === 'CRM_Event_Form_Registration_Register'
+    || $formName === 'CRM_Event_Form_Registration_Confirm'
+    || $formName === 'CRM_Event_Form_Registration_ThankYou') {
+    $initialCheck = civicrm_api3('EventHoldingTickets', 'get', ['event_id' => $form->_eventId]);
+    if (!$initialCheck['count']) {
+      civicrm_api3('EventHoldingTickets', 'create', ['event_id' => $form->_eventId, 'number_holding_tickets' => 0]);
+    }
+    // This gets set in the Register PostProcess hook.
+    $submittedParticipantCount = $form->get('partCount');
+    // We have either returned to the start due to an error e.g. payment processor error or have made it all the way through to the end.
+    if (($formName === 'CRM_Event_Form_Registration_Register' ||
+      $formName === 'CRM_Event_Form_Registration_ThankYou') && !is_null($submittedParticipantCount)) {
+      $lock = Civi::lockManager()->acquire('worker.avaliabletickets.' . $form->_eventId);
+      if ($lock->isAcquired()) {
+        $currentCount = civicrm_api3('EventHoldingTickets', 'get', ['event_id' => $form->_eventId]);
+        $updated_count = $currentCount['values'][$currentCount['id']]['number_holding_tickets'] - $submittedParticipantCount;
+        civicrm_api3('EventHoldingTickets', 'create', ['id' => $currentCount['id'], 'number_holding_tickets' => $updated_count]);
+        $lock->release();
+      }
+    }
+    $sessionCount = FALSE;
+    if ($formName === 'CRM_Event_Form_Registration_Register') {
+      $sessionCount = 1;
+    }
+    $fullCheck = CRM_Checkavaliabletickets_BAO_EventHoldingTickets::isEventFull($form->_eventId, $sessionCount);
+    if ($fullCheck) {
+      $event = civicrm_api3('Event', 'getsingle', ['id' => $form->_eventId]);
+      CRM_Core_Session::setStatus($event['event_full_text']);
+      CRM_Utils_System::redirect(CRM_Utils_System::url('civicrm/event/info', "reset=1&id={$form->_eventId}", FALSE, NULL, FALSE, TRUE));
+    }
+  }
+}
 
 /**
- * Implements hook_civicrm_navigationMenu().
+ * Implements hook_civicrm_validateForm().
  *
- * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_navigationMenu
+ * @param string $formName
+ * @param array $fields
+ * @param array $files
+ * @param CRM_Core_Form $form
+ * @param array $errors
+ */
+function checkavaliabletickets_civicrm_validateForm($formName, &$fields, &$files, &$form, &$errors) {
+  if ($formName === 'CRM_Event_Form_Registration_Confirm') {
+    $fullCheck = CRM_Checkavaliabletickets_BAO_EventHoldingTickets::isEventFull($form->_eventId);
+    if ($fullCheck) {
+      $event = civicrm_api3('Event', 'getsingle', ['id' => $form->_eventId]);
+      CRM_Core_Session::setStatus($event['event_full_text']);
+      CRM_Utils_System::redirect(CRM_Utils_System::url('civicrm/event/info', "reset=1&id={$form->_eventId}", FALSE, NULL, FALSE, TRUE));
+    }
+  }
+}
+
+/**
+ * Implements hook_civicrm_postProcess().
  *
-function checkavaliabletickets_civicrm_navigationMenu(&$menu) {
-  _checkavaliabletickets_civix_insert_navigation_menu($menu, 'Mailings', array(
-    'label' => E::ts('New subliminal message'),
-    'name' => 'mailing_subliminal_message',
-    'url' => 'civicrm/mailing/subliminal',
-    'permission' => 'access CiviMail',
-    'operator' => 'OR',
-    'separator' => 0,
-  ));
-  _checkavaliabletickets_civix_navigationMenu($menu);
-} // */
+ */
+function checkavaliabletickets_civicrm_postProcess($formName, &$form) {
+  if ($formName === 'CRM_Event_Form_Registration_Register') {
+    $submittedParams = $form->get('params')[0];
+    $submittedParticipantCount = CRM_Event_Form_Registration::getParticipantCount($form, $submittedParams);
+    $form->set('partCount', $submittedParticipantCount);
+    $fullCheck = CRM_Checkavaliabletickets_BAO_EventHoldingTickets::isEventFull($form->_eventId, $submittedParticipantCount);
+    if ($fullCheck) {
+      $event = civicrm_api3('Event', 'getsingle', ['id' => $form->_eventId]);
+      CRM_Core_Session::setStatus($event['event_full_text']);
+      CRM_Utils_System::redirect(CRM_Utils_System::url('civicrm/event/info', "reset=1&id={$form->_eventId}", FALSE, NULL, FALSE, TRUE));
+    }
+    $lock = Civi::lockManager()->acquire('worker.avaliabletickets.' . $form->_eventId);
+    if ($lock->isAcquired()) {
+      $currentCount = civicrm_api3('EventHoldingTickets', 'get', ['event_id' => $form->_eventId]);
+      $updated_count = $currentCount['values'][$currentCount['id']]['number_holding_tickets'] + $submittedParticipantCount;
+      civicrm_api3('EventHoldingTickets', 'create', ['id' => $currentCount['id'], 'number_holding_tickets' => $updated_count]);
+      $lock->release();
+    }
+  }
+  if ($formName === 'CRM_Event_Form_Registration_Confirm') {
+  }
+}
