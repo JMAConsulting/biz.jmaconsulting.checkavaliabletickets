@@ -166,11 +166,13 @@ function checkavaliabletickets_civicrm_preProcess($formName, &$form) {
     if ($formName === 'CRM_Event_Form_Registration_Register') {
       $sessionCount = 1;
     }
-    $fullCheck = CRM_Checkavaliabletickets_BAO_EventHoldingTickets::isEventFull($form->_eventId, $sessionCount);
-    if ($fullCheck) {
-      $event = civicrm_api3('Event', 'getsingle', ['id' => $form->_eventId]);
-      CRM_Core_Session::setStatus($event['event_full_text']);
-      CRM_Utils_System::redirect(CRM_Utils_System::url('civicrm/event/info', "reset=1&id={$form->_eventId}", FALSE, NULL, FALSE, TRUE));
+    if ($formName === 'CRM_Event_Form_Registration_Register' || $$formName === 'CRM_Event_Form_Registration_Confirm') {
+      $fullCheck = CRM_Checkavaliabletickets_BAO_EventHoldingTickets::isEventFull($form->_eventId, $sessionCount);
+      if ($fullCheck) {
+        $event = civicrm_api3('Event', 'getsingle', ['id' => $form->_eventId]);
+        CRM_Core_Session::setStatus($event['event_full_text']);
+        CRM_Utils_System::redirect(CRM_Utils_System::url('civicrm/event/info', "reset=1&id={$form->_eventId}", FALSE, NULL, FALSE, TRUE));
+      }
     }
   }
 }
@@ -217,7 +219,5 @@ function checkavaliabletickets_civicrm_postProcess($formName, &$form) {
       civicrm_api3('EventHoldingTickets', 'create', ['id' => $currentCount['id'], 'number_holding_tickets' => $updated_count]);
       $lock->release();
     }
-  }
-  if ($formName === 'CRM_Event_Form_Registration_Confirm') {
   }
 }
