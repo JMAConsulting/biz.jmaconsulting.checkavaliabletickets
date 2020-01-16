@@ -1,12 +1,11 @@
 <?php
 
 require_once 'checkavaliabletickets.civix.php';
-use CRM_Checkavaliabletickets_ExtensionUtil as E;
 
 /**
  * Implements hook_civicrm_config().
  *
- * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_config/ 
+ * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_config/
  */
 function checkavaliabletickets_civicrm_config(&$config) {
   _checkavaliabletickets_civix_civicrm_config($config);
@@ -141,6 +140,23 @@ function checkavaliabletickets_civicrm_themes(&$themes) {
   _checkavaliabletickets_civix_civicrm_themes($themes);
 }
 
+/**
+ * Implements hook_civicrm_pageRun().
+ */
+function checkavaliabletickets_civicrm_pageRun(&$page) {
+  $pageName = $page->getVar('_name');
+  if ($pageName === 'CRM_Event_Page_EventInfo') {
+    $store = NULL;
+    $holdingFull = CRM_Utils_Request::retrieve('holdingFull', 'Int', $store, FALSE, 0);
+    if ($holdingFull) {
+      $page->assign('allowRegistration', 0);
+    }
+  }
+}
+
+/**
+ * Implements hook_civicrm_preProcess().
+ */
 function checkavaliabletickets_civicrm_preProcess($formName, &$form) {
   if ($formName === 'CRM_Event_Form_Registration_Register'
     || $formName === 'CRM_Event_Form_Registration_Confirm'
@@ -171,7 +187,7 @@ function checkavaliabletickets_civicrm_preProcess($formName, &$form) {
       if ($fullCheck) {
         $event = civicrm_api3('Event', 'getsingle', ['id' => $form->_eventId]);
         CRM_Core_Session::setStatus($event['event_full_text']);
-        CRM_Utils_System::redirect(CRM_Utils_System::url('civicrm/event/info', "reset=1&id={$form->_eventId}", FALSE, NULL, FALSE, TRUE));
+        CRM_Utils_System::redirect(CRM_Utils_System::url('civicrm/event/info', "reset=1&id={$form->_eventId}&holdingFull=1", FALSE, NULL, FALSE, TRUE));
       }
     }
   }
@@ -179,12 +195,6 @@ function checkavaliabletickets_civicrm_preProcess($formName, &$form) {
 
 /**
  * Implements hook_civicrm_validateForm().
- *
- * @param string $formName
- * @param array $fields
- * @param array $files
- * @param CRM_Core_Form $form
- * @param array $errors
  */
 function checkavaliabletickets_civicrm_validateForm($formName, &$fields, &$files, &$form, &$errors) {
   if ($formName === 'CRM_Event_Form_Registration_Confirm') {
@@ -192,14 +202,13 @@ function checkavaliabletickets_civicrm_validateForm($formName, &$fields, &$files
     if ($fullCheck) {
       $event = civicrm_api3('Event', 'getsingle', ['id' => $form->_eventId]);
       CRM_Core_Session::setStatus($event['event_full_text']);
-      CRM_Utils_System::redirect(CRM_Utils_System::url('civicrm/event/info', "reset=1&id={$form->_eventId}", FALSE, NULL, FALSE, TRUE));
+      CRM_Utils_System::redirect(CRM_Utils_System::url('civicrm/event/info', "reset=1&id={$form->_eventId}&holdingFull=1", FALSE, NULL, FALSE, TRUE));
     }
   }
 }
 
 /**
  * Implements hook_civicrm_postProcess().
- *
  */
 function checkavaliabletickets_civicrm_postProcess($formName, &$form) {
   if ($formName === 'CRM_Event_Form_Registration_Register') {
@@ -210,7 +219,7 @@ function checkavaliabletickets_civicrm_postProcess($formName, &$form) {
     if ($fullCheck) {
       $event = civicrm_api3('Event', 'getsingle', ['id' => $form->_eventId]);
       CRM_Core_Session::setStatus($event['event_full_text']);
-      CRM_Utils_System::redirect(CRM_Utils_System::url('civicrm/event/info', "reset=1&id={$form->_eventId}", FALSE, NULL, FALSE, TRUE));
+      CRM_Utils_System::redirect(CRM_Utils_System::url('civicrm/event/info', "reset=1&id={$form->_eventId}&holdingFull=1", FALSE, NULL, FALSE, TRUE));
     }
     $lock = Civi::lockManager()->acquire('worker.avaliabletickets.' . $form->_eventId);
     if ($lock->isAcquired()) {
