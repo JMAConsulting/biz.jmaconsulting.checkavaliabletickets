@@ -174,6 +174,10 @@ function checkavaliabletickets_civicrm_preProcess($formName, &$form) {
       if ($lock->isAcquired()) {
         $currentCount = civicrm_api3('EventHoldingTickets', 'get', ['event_id' => $form->_eventId]);
         $updated_count = $currentCount['values'][$currentCount['id']]['number_holding_tickets'] - $submittedParticipantCount;
+        // Ensure that we don't go lower than 0 on the holding tickets count.
+        if ($update_count < 0) {
+          $updated_count = 0;
+        }
         civicrm_api3('EventHoldingTickets', 'create', ['id' => $currentCount['id'], 'number_holding_tickets' => $updated_count]);
         $lock->release();
       }
