@@ -61,7 +61,7 @@ class CRM_Checkavailabletickets_Upgrader extends CRM_Checkavailabletickets_Upgra
    * @return TRUE on success
    * @throws Exception
    */
-  public function upgrade_4200() {
+  public function upgrade_1001() {
     $this->ctx->log->info('Applying update 1001');
     $this->executeSqlFile('sql/upgrade_1001.sql');
     return TRUE;
