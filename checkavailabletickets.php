@@ -164,6 +164,9 @@ function checkavailabletickets_civicrm_preProcess($formName, &$form) {
     $initialCheck = civicrm_api3('EventHoldingTickets', 'get', ['event_id' => $form->_eventId]);
     if (!$initialCheck['count']) {
       civicrm_api3('EventHoldingTickets', 'create', ['event_id' => $form->_eventId, 'number_holding_tickets' => 0]);
+    }
+    $initialCheck = civicrm_api3('EventHoldingTicketsSession', 'get', ['event_id' => $form->_eventId, 'session_id' => $form->controller->_key]);
+    if (!$initialCheck['count']) {
       civicrm_api3('EventHoldingTicketsSession', 'create', ['event_id' => $form->_eventId, 'number_holding_tickets' => 0, 'session_id' => $form->controller->_key]);
     }
     // This gets set in the Register PostProcess hook.
