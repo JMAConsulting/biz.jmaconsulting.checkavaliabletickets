@@ -17,6 +17,7 @@
 
 SET FOREIGN_KEY_CHECKS=0;
 
+DROP TABLE IF EXISTS `civicrm_event_holding_tickets_session`;
 DROP TABLE IF EXISTS `civicrm_event_holding_tickets`;
 
 SET FOREIGN_KEY_CHECKS=1;

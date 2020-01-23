@@ -164,23 +164,14 @@ function checkavailabletickets_civicrm_preProcess($formName, &$form) {
     $initialCheck = civicrm_api3('EventHoldingTickets', 'get', ['event_id' => $form->_eventId]);
     if (!$initialCheck['count']) {
       civicrm_api3('EventHoldingTickets', 'create', ['event_id' => $form->_eventId, 'number_holding_tickets' => 0]);
+      civicrm_api3('EventHoldingTicketsSession', 'create', ['event_id' => $form->_eventId, 'number_holding_tickets' => 0, 'session_id' => $form->controller->_key]);
     }
     // This gets set in the Register PostProcess hook.
     $submittedParticipantCount = $form->get('partCount');
     // We have either returned to the start due to an error e.g. payment processor error or have made it all the way through to the end.
     if (($formName === 'CRM_Event_Form_Registration_Register' ||
       $formName === 'CRM_Event_Form_Registration_ThankYou') && !is_null($submittedParticipantCount)) {
-      $lock = Civi::lockManager()->acquire('worker.avaliabletickets.' . $form->_eventId);
-      if ($lock->isAcquired()) {
-        $currentCount = civicrm_api3('EventHoldingTickets', 'get', ['event_id' => $form->_eventId]);
-        $updated_count = $currentCount['values'][$currentCount['id']]['number_holding_tickets'] - $submittedParticipantCount;
-        // Ensure that we don't go lower than 0 on the holding tickets count.
-        if ($update_count < 0) {
-          $updated_count = 0;
-        }
-        civicrm_api3('EventHoldingTickets', 'create', ['id' => $currentCount['id'], 'number_holding_tickets' => $updated_count]);
-        $lock->release();
-      }
+      CRM_Checkavaliabletickets_BAO_EventHoldingTickets::updateHoldingTicketsCount($submittedParticipantCount, '-', $form->_eventId, $form->controller->_key);
     }
     $sessionCount = FALSE;
     if ($formName === 'CRM_Event_Form_Registration_Register') {
@@ -225,12 +216,6 @@ function checkavailabletickets_civicrm_postProcess($formName, &$form) {
       CRM_Core_Session::setStatus($event['event_full_text']);
       CRM_Utils_System::redirect(CRM_Utils_System::url('civicrm/event/info', "reset=1&id={$form->_eventId}&holdingFull=1", FALSE, NULL, FALSE, TRUE));
     }
-    $lock = Civi::lockManager()->acquire('worker.avaliabletickets.' . $form->_eventId);
-    if ($lock->isAcquired()) {
-      $currentCount = civicrm_api3('EventHoldingTickets', 'get', ['event_id' => $form->_eventId]);
-      $updated_count = $currentCount['values'][$currentCount['id']]['number_holding_tickets'] + $submittedParticipantCount;
-      civicrm_api3('EventHoldingTickets', 'create', ['id' => $currentCount['id'], 'number_holding_tickets' => $updated_count]);
-      $lock->release();
-    }
+    CRM_Checkavaliabletickets_BAO_EventHoldingTickets::updateHoldingTicketsCount($submittedParticipantCount, '+', $form->_eventId, $form->controller->_key);
   }
 }
