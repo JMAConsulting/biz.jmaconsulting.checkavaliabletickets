@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <extension key="biz.jmaconsulting.checkavailabletickets" type="module">
   <file>checkavailabletickets</file>
-  <name>Check Avaliable Event Tickets</name>
+  <name>Check Available Event Tickets</name>
   <description>Counts the number of tickets being in progress of being sold and checks that against the event count to prevent overselling</description>
   <license>AGPL-3.0</license>
   <maintainer>
