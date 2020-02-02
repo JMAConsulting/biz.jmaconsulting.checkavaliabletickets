@@ -5,7 +5,7 @@ return array (
   0 => 
   array (
     'name' => 'EventHoldingTickets',
-    'class' => 'CRM_Checkavaliabletickets_DAO_EventHoldingTickets',
+    'class' => 'CRM_Checkavailabletickets_DAO_EventHoldingTickets',
     'table' => 'civicrm_event_holding_tickets',
   ),
 );

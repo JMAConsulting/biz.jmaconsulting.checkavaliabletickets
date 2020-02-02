@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="iso-8859-1" ?>
 
 <table>
-  <base>CRM/Checkavaliabletickets</base>
+  <base>CRM/Checkavailabletickets</base>
   <class>EventHoldingTickets</class>
   <name>civicrm_event_holding_tickets</name>
   <comment>Table to hold a count of the number of tickets currently being held</comment>

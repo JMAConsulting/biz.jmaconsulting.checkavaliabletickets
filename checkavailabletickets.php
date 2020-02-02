@@ -1,14 +1,14 @@
 <?php
 
-require_once 'checkavaliabletickets.civix.php';
+require_once 'checkavailabletickets.civix.php';
 
 /**
  * Implements hook_civicrm_config().
  *
  * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_config/
  */
-function checkavaliabletickets_civicrm_config(&$config) {
-  _checkavaliabletickets_civix_civicrm_config($config);
+function checkavailabletickets_civicrm_config(&$config) {
+  _checkavailabletickets_civix_civicrm_config($config);
 }
 
 /**
@@ -16,8 +16,8 @@ function checkavaliabletickets_civicrm_config(&$config) {
  *
  * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_xmlMenu
  */
-function checkavaliabletickets_civicrm_xmlMenu(&$files) {
-  _checkavaliabletickets_civix_civicrm_xmlMenu($files);
+function checkavailabletickets_civicrm_xmlMenu(&$files) {
+  _checkavailabletickets_civix_civicrm_xmlMenu($files);
 }
 
 /**
@@ -25,8 +25,8 @@ function checkavaliabletickets_civicrm_xmlMenu(&$files) {
  *
  * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_install
  */
-function checkavaliabletickets_civicrm_install() {
-  _checkavaliabletickets_civix_civicrm_install();
+function checkavailabletickets_civicrm_install() {
+  _checkavailabletickets_civix_civicrm_install();
 }
 
 /**
@@ -34,8 +34,8 @@ function checkavaliabletickets_civicrm_install() {
  *
  * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_postInstall
  */
-function checkavaliabletickets_civicrm_postInstall() {
-  _checkavaliabletickets_civix_civicrm_postInstall();
+function checkavailabletickets_civicrm_postInstall() {
+  _checkavailabletickets_civix_civicrm_postInstall();
 }
 
 /**
@@ -43,8 +43,8 @@ function checkavaliabletickets_civicrm_postInstall() {
  *
  * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_uninstall
  */
-function checkavaliabletickets_civicrm_uninstall() {
-  _checkavaliabletickets_civix_civicrm_uninstall();
+function checkavailabletickets_civicrm_uninstall() {
+  _checkavailabletickets_civix_civicrm_uninstall();
 }
 
 /**
@@ -52,8 +52,8 @@ function checkavaliabletickets_civicrm_uninstall() {
  *
  * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_enable
  */
-function checkavaliabletickets_civicrm_enable() {
-  _checkavaliabletickets_civix_civicrm_enable();
+function checkavailabletickets_civicrm_enable() {
+  _checkavailabletickets_civix_civicrm_enable();
 }
 
 /**
@@ -61,8 +61,8 @@ function checkavaliabletickets_civicrm_enable() {
  *
  * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_disable
  */
-function checkavaliabletickets_civicrm_disable() {
-  _checkavaliabletickets_civix_civicrm_disable();
+function checkavailabletickets_civicrm_disable() {
+  _checkavailabletickets_civix_civicrm_disable();
 }
 
 /**
@@ -70,8 +70,8 @@ function checkavaliabletickets_civicrm_disable() {
  *
  * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_upgrade
  */
-function checkavaliabletickets_civicrm_upgrade($op, CRM_Queue_Queue $queue = NULL) {
-  return _checkavaliabletickets_civix_civicrm_upgrade($op, $queue);
+function checkavailabletickets_civicrm_upgrade($op, CRM_Queue_Queue $queue = NULL) {
+  return _checkavailabletickets_civix_civicrm_upgrade($op, $queue);
 }
 
 /**
@@ -82,8 +82,8 @@ function checkavaliabletickets_civicrm_upgrade($op, CRM_Queue_Queue $queue = NUL
  *
  * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_managed
  */
-function checkavaliabletickets_civicrm_managed(&$entities) {
-  _checkavaliabletickets_civix_civicrm_managed($entities);
+function checkavailabletickets_civicrm_managed(&$entities) {
+  _checkavailabletickets_civix_civicrm_managed($entities);
 }
 
 /**
@@ -95,8 +95,8 @@ function checkavaliabletickets_civicrm_managed(&$entities) {
  *
  * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_caseTypes
  */
-function checkavaliabletickets_civicrm_caseTypes(&$caseTypes) {
-  _checkavaliabletickets_civix_civicrm_caseTypes($caseTypes);
+function checkavailabletickets_civicrm_caseTypes(&$caseTypes) {
+  _checkavailabletickets_civix_civicrm_caseTypes($caseTypes);
 }
 
 /**
@@ -109,8 +109,8 @@ function checkavaliabletickets_civicrm_caseTypes(&$caseTypes) {
  *
  * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_angularModules
  */
-function checkavaliabletickets_civicrm_angularModules(&$angularModules) {
-  _checkavaliabletickets_civix_civicrm_angularModules($angularModules);
+function checkavailabletickets_civicrm_angularModules(&$angularModules) {
+  _checkavailabletickets_civix_civicrm_angularModules($angularModules);
 }
 
 /**
@@ -118,8 +118,8 @@ function checkavaliabletickets_civicrm_angularModules(&$angularModules) {
  *
  * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_alterSettingsFolders
  */
-function checkavaliabletickets_civicrm_alterSettingsFolders(&$metaDataFolders = NULL) {
-  _checkavaliabletickets_civix_civicrm_alterSettingsFolders($metaDataFolders);
+function checkavailabletickets_civicrm_alterSettingsFolders(&$metaDataFolders = NULL) {
+  _checkavailabletickets_civix_civicrm_alterSettingsFolders($metaDataFolders);
 }
 
 /**
@@ -129,21 +129,21 @@ function checkavaliabletickets_civicrm_alterSettingsFolders(&$metaDataFolders = 
  *
  * @link https://docs.civicrm.org/dev/en/latest/hooks/hook_civicrm_entityTypes
  */
-function checkavaliabletickets_civicrm_entityTypes(&$entityTypes) {
-  _checkavaliabletickets_civix_civicrm_entityTypes($entityTypes);
+function checkavailabletickets_civicrm_entityTypes(&$entityTypes) {
+  _checkavailabletickets_civix_civicrm_entityTypes($entityTypes);
 }
 
 /**
  * Implements hook_civicrm_thems().
  */
-function checkavaliabletickets_civicrm_themes(&$themes) {
-  _checkavaliabletickets_civix_civicrm_themes($themes);
+function checkavailabletickets_civicrm_themes(&$themes) {
+  _checkavailabletickets_civix_civicrm_themes($themes);
 }
 
 /**
  * Implements hook_civicrm_pageRun().
  */
-function checkavaliabletickets_civicrm_pageRun(&$page) {
+function checkavailabletickets_civicrm_pageRun(&$page) {
   $pageName = $page->getVar('_name');
   if ($pageName === 'CRM_Event_Page_EventInfo') {
     $store = NULL;
@@ -157,7 +157,7 @@ function checkavaliabletickets_civicrm_pageRun(&$page) {
 /**
  * Implements hook_civicrm_preProcess().
  */
-function checkavaliabletickets_civicrm_preProcess($formName, &$form) {
+function checkavailabletickets_civicrm_preProcess($formName, &$form) {
   if ($formName === 'CRM_Event_Form_Registration_Register'
     || $formName === 'CRM_Event_Form_Registration_Confirm'
     || $formName === 'CRM_Event_Form_Registration_ThankYou') {
@@ -187,7 +187,7 @@ function checkavaliabletickets_civicrm_preProcess($formName, &$form) {
       $sessionCount = 1;
     }
     if ($formName === 'CRM_Event_Form_Registration_Register' || $formName === 'CRM_Event_Form_Registration_Confirm') {
-      $fullCheck = CRM_Checkavaliabletickets_BAO_EventHoldingTickets::isEventFull($form->_eventId, $sessionCount);
+      $fullCheck = CRM_Checkavailabletickets_BAO_EventHoldingTickets::isEventFull($form->_eventId, $sessionCount);
       if ($fullCheck) {
         $event = civicrm_api3('Event', 'getsingle', ['id' => $form->_eventId]);
         CRM_Core_Session::setStatus($event['event_full_text']);
@@ -200,9 +200,9 @@ function checkavaliabletickets_civicrm_preProcess($formName, &$form) {
 /**
  * Implements hook_civicrm_validateForm().
  */
-function checkavaliabletickets_civicrm_validateForm($formName, &$fields, &$files, &$form, &$errors) {
+function checkavailabletickets_civicrm_validateForm($formName, &$fields, &$files, &$form, &$errors) {
   if ($formName === 'CRM_Event_Form_Registration_Confirm') {
-    $fullCheck = CRM_Checkavaliabletickets_BAO_EventHoldingTickets::isEventFull($form->_eventId);
+    $fullCheck = CRM_Checkavailabletickets_BAO_EventHoldingTickets::isEventFull($form->_eventId);
     if ($fullCheck) {
       $event = civicrm_api3('Event', 'getsingle', ['id' => $form->_eventId]);
       CRM_Core_Session::setStatus($event['event_full_text']);
@@ -214,12 +214,12 @@ function checkavaliabletickets_civicrm_validateForm($formName, &$fields, &$files
 /**
  * Implements hook_civicrm_postProcess().
  */
-function checkavaliabletickets_civicrm_postProcess($formName, &$form) {
+function checkavailabletickets_civicrm_postProcess($formName, &$form) {
   if ($formName === 'CRM_Event_Form_Registration_Register') {
     $submittedParams = $form->get('params')[0];
     $submittedParticipantCount = CRM_Event_Form_Registration::getParticipantCount($form, $submittedParams);
     $form->set('partCount', $submittedParticipantCount);
-    $fullCheck = CRM_Checkavaliabletickets_BAO_EventHoldingTickets::isEventFull($form->_eventId, $submittedParticipantCount);
+    $fullCheck = CRM_Checkavailabletickets_BAO_EventHoldingTickets::isEventFull($form->_eventId, $submittedParticipantCount);
     if ($fullCheck) {
       $event = civicrm_api3('Event', 'getsingle', ['id' => $form->_eventId]);
       CRM_Core_Session::setStatus($event['event_full_text']);

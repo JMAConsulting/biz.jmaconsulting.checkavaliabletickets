@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
-<extension key="biz.jmaconsulting.checkavaliabletickets" type="module">
-  <file>checkavaliabletickets</file>
-  <name>FIXME</name>
-  <description>FIXME</description>
+<extension key="biz.jmaconsulting.checkavailabletickets" type="module">
+  <file>checkavailabletickets</file>
+  <name>Check Avaliable Event Tickets</name>
+  <description>Counts the number of tickets being in progress of being sold and checks that against the event count to prevent overselling</description>
   <license>AGPL-3.0</license>
   <maintainer>
     <author>Seamus Lee</author>
@@ -25,6 +25,6 @@
     <psr4 prefix="Civi\" path="Civi"/>
   </classloader>
   <civix>
-    <namespace>CRM/Checkavaliabletickets</namespace>
+    <namespace>CRM/Checkavailabletickets</namespace>
   </civix>
 </extension>

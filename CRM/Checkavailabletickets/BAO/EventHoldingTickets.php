@@ -1,6 +1,6 @@
 <?php
 
-class CRM_Checkavaliabletickets_BAO_EventHoldingTickets extends CRM_Checkavaliabletickets_DAO_EventHoldingTickets {
+class CRM_Checkavailabletickets_BAO_EventHoldingTickets extends CRM_Checkavailabletickets_DAO_EventHoldingTickets {
 
   /**
    * Check to see if when including the number of tickets that are in progress or being 'held'
