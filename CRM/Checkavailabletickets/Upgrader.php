@@ -60,13 +60,12 @@ class CRM_Checkavailabletickets_Upgrader extends CRM_Checkavailabletickets_Upgra
    *
    * @return TRUE on success
    * @throws Exception
-   *
-  public function upgrade_4200() {
-    $this->ctx->log->info('Applying update 4200');
-    CRM_Core_DAO::executeQuery('UPDATE foo SET bar = "whiz"');
-    CRM_Core_DAO::executeQuery('DELETE FROM bang WHERE willy = wonka(2)');
+   */
+  public function upgrade_1001() {
+    $this->ctx->log->info('Applying update 1001');
+    $this->executeSqlFile('sql/upgrade_1001.sql');
     return TRUE;
-  } // */
+  }
 
 
   /**

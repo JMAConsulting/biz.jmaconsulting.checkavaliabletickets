@@ -1,4 +1,4 @@
-# biz.jmaconsulting.checkavaliabletickets
+# biz.jmaconsulting.checkavailabletickets
 
 This extension adds in the ability to manage a calculation of number of tickets sold and in the process of being sold in an Event. This is useful as you may have a number of concurrent event registrations and you need to ensure that the ability to register for the event is still valid. It adds checks before loading the registration page, after submitting the registration page before loading the Confirm page and then after submitting the confirm step but before actually processing the confirm page. It checks the total number of tickets sold as returned by the sum of eventFull and the number of tickets being sold (held) that is stored as a counter in a database table.
 

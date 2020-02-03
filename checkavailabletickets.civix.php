@@ -479,5 +479,11 @@ function _checkavailabletickets_civix_civicrm_entityTypes(&$entityTypes) {
       'class' => 'CRM_Checkavailabletickets_DAO_EventHoldingTickets',
       'table' => 'civicrm_event_holding_tickets',
     ),
+    'CRM_Checkavailabletickets_DAO_EventHoldingTicketsSession' => 
+    array (
+      'name' => 'EventHoldingTicketsSession',
+      'class' => 'CRM_Checkavailabletickets_DAO_EventHoldingTicketsSession',
+      'table' => 'civicrm_event_holding_tickets_session',
+    ),
   ));
 }
