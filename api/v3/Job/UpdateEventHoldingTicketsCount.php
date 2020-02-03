@@ -1,5 +1,5 @@
 <?php
-use CRM_Checkavaliabletickets_ExtensionUtil as E;
+use CRM_Checkavailabletickets_ExtensionUtil as E;
 
 /**
  * Job.update_event_holding_ticket_count API
@@ -14,6 +14,6 @@ use CRM_Checkavaliabletickets_ExtensionUtil as E;
  * @throws API_Exception
  */
 function civicrm_api3_job_update_event_holding_tickets_count($params) {
-  CRM_Checkavaliabletickets_BAO_EventHoldingTickets::updateTicketHoldingCount();
+  CRM_Checkavailabletickets_BAO_EventHoldingTickets::updateTicketHoldingCount();
   return civicrm_api3_create_success([], $params, 'Job', 'UpdateEventHoldingTicketsCount');
 }

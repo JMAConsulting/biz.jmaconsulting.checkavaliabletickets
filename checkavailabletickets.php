@@ -2,6 +2,8 @@
 
 require_once 'checkavailabletickets.civix.php';
 
+use CRM_Checkavailabletickets_ExtensionUtil as E; 
+
 /**
  * Implements hook_civicrm_config().
  *
@@ -220,5 +222,28 @@ function checkavailabletickets_civicrm_postProcess($formName, &$form) {
       CRM_Utils_System::redirect(CRM_Utils_System::url('civicrm/event/info', "reset=1&id={$form->_eventId}&holdingFull=1", FALSE, NULL, FALSE, TRUE));
     }
     CRM_Checkavaliabletickets_BAO_EventHoldingTickets::updateHoldingTicketsCount($submittedParticipantCount, '+', $form->_eventId, $form->controller->_key);
+  }
+}
+
+function checkavailabletickets_civicrm_tabSet($tabsetName, &$tabs, $context) {
+  if ($tabsetName == 'civicrm/event/manage') {
+    if (!empty($context)) {
+      $eventID = $context['event_id'];
+      $url = CRM_Utils_System::url( 'civicrm/event/manage/ticketcount',
+        "reset=1&snippet=5&force=1&id=$eventID&action=update&component=event" );
+      $tabs['ticketcount'] = array(
+        'title' => E::ts('Current Holding Ticket Count'),
+        'link' => $url,
+        'valid' => 1,
+        'active' => 1,
+        'current' => false,
+      );
+    }
+    else {
+      $tabs['ticketcount'] = [
+        'title' => E::ts('Current Holding Ticket Count'),
+        'url' => 'civicrm/event/manage/ticketcount',
+      ];
+    }
   }
 }
