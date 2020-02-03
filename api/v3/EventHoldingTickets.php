@@ -1,5 +1,5 @@
 <?php
-use CRM_Checkavaliabletickets_ExtensionUtil as E;
+use CRM_Checkavailabletickets_ExtensionUtil as E;
 
 /**
  * EventHoldingTickets.create API specification (optional).
