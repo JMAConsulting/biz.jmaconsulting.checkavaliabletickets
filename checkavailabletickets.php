@@ -221,7 +221,7 @@ function checkavailabletickets_civicrm_postProcess($formName, &$form) {
       CRM_Core_Session::setStatus($event['event_full_text']);
       CRM_Utils_System::redirect(CRM_Utils_System::url('civicrm/event/info', "reset=1&id={$form->_eventId}&holdingFull=1", FALSE, NULL, FALSE, TRUE));
     }
-    CRM_Checkavaliabletickets_BAO_EventHoldingTickets::updateHoldingTicketsCount($submittedParticipantCount, '+', $form->_eventId, $form->controller->_key);
+    CRM_Checkavailabletickets_BAO_EventHoldingTickets::updateHoldingTicketsCount($submittedParticipantCount, '+', $form->_eventId, $form->controller->_key);
   }
 }
 
