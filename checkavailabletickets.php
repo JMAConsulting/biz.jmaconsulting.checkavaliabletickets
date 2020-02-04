@@ -2,7 +2,7 @@
 
 require_once 'checkavailabletickets.civix.php';
 
-use CRM_Checkavailabletickets_ExtensionUtil as E; 
+use CRM_Checkavailabletickets_ExtensionUtil as E;
 
 /**
  * Implements hook_civicrm_config().
@@ -176,7 +176,7 @@ function checkavailabletickets_civicrm_preProcess($formName, &$form) {
     // We have either returned to the start due to an error e.g. payment processor error or have made it all the way through to the end.
     if (($formName === 'CRM_Event_Form_Registration_Register' ||
       $formName === 'CRM_Event_Form_Registration_ThankYou') && !is_null($submittedParticipantCount)) {
-      CRM_Checkavaliabletickets_BAO_EventHoldingTickets::updateHoldingTicketsCount($submittedParticipantCount, '-', $form->_eventId, $form->controller->_key);
+      CRM_Checkavailabletickets_BAO_EventHoldingTickets::updateHoldingTicketsCount($submittedParticipantCount, '-', $form->_eventId, $form->controller->_key);
     }
     $sessionCount = FALSE;
     if ($formName === 'CRM_Event_Form_Registration_Register') {
