@@ -44,9 +44,14 @@ class CRM_Checkavailabletickets_Form_TicketCount extends CRM_Event_Form_ManageEv
       FROM civicrm_event_holding_tickets_session
       WHERE event_id = %1
       GROUP BY event_id", [1 => [$this->_id, 'Positive']]);
+    // ensure that even if there is nothing in thre session table we reset to 0.
+    $sessionCount = empty($sessionCount) ? 0 : $sessionCount;
     $counter = civicrm_api3('EventHoldingTickets', 'get', ['event_id' => $this->_id]);
     civicrm_api3('EventHoldingTickets', 'create', ['id' => $counter['id'], 'number_holding_tickets' => $sessionCount]);
-    
+    $this->postProcessHook();
+    $this->endPostProcess();
+    $url = CRM_Utils_System::url('civicrm/event/manage/ticketcount', 'reset=1&action=update&id=' . $this->_id);
+    CRM_Utils_System::redirect($url);
   }
 
   /**
