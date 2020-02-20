@@ -160,6 +160,15 @@ function checkavailabletickets_civicrm_pageRun(&$page) {
  * Implements hook_civicrm_preProcess().
  */
 function checkavailabletickets_civicrm_preProcess($formName, &$form) {
+  if ($formName === 'CRM_Event_Form_Registration_Register') {
+    $participantID = $form->getVar('_participantId');
+    if (!empty($participantID)) {
+      $form->set('checkTicketsFromWaitlisting', TRUE);
+    }
+    else {
+      $form->set('checkTicketsFromWaitlisting', FALSE);
+    }
+  }
   if ($formName === 'CRM_Event_Form_Registration_Register'
     || $formName === 'CRM_Event_Form_Registration_Confirm'
     || $formName === 'CRM_Event_Form_Registration_ThankYou') {
@@ -173,16 +182,17 @@ function checkavailabletickets_civicrm_preProcess($formName, &$form) {
     }
     // This gets set in the Register PostProcess hook.
     $submittedParticipantCount = $form->get('partCount');
+    $fromWaitlisting = $form->get('checkTicketsFromWaitlisting');
     // We have either returned to the start due to an error e.g. payment processor error or have made it all the way through to the end.
     if (($formName === 'CRM_Event_Form_Registration_Register' ||
-      $formName === 'CRM_Event_Form_Registration_ThankYou') && !is_null($submittedParticipantCount)) {
+      $formName === 'CRM_Event_Form_Registration_ThankYou') && !is_null($submittedParticipantCount) && !$fromWaitlisting) {
       CRM_Checkavailabletickets_BAO_EventHoldingTickets::updateHoldingTicketsCount($submittedParticipantCount, '-', $form->_eventId, $form->controller->_key);
     }
     $sessionCount = FALSE;
     if ($formName === 'CRM_Event_Form_Registration_Register') {
       $sessionCount = 1;
     }
-    if ($formName === 'CRM_Event_Form_Registration_Register' || $formName === 'CRM_Event_Form_Registration_Confirm') {
+    if (($formName === 'CRM_Event_Form_Registration_Register' || $formName === 'CRM_Event_Form_Registration_Confirm') && !$fromWaitlisting) {
       $fullCheck = CRM_Checkavailabletickets_BAO_EventHoldingTickets::isEventFull($form->_eventId, $sessionCount);
       if ($fullCheck) {
         $event = civicrm_api3('Event', 'getsingle', ['id' => $form->_eventId]);
@@ -209,12 +219,15 @@ function checkavailabletickets_civicrm_preProcess($formName, &$form) {
  */
 function checkavailabletickets_civicrm_validateForm($formName, &$fields, &$files, &$form, &$errors) {
   if ($formName === 'CRM_Event_Form_Registration_Confirm') {
-    $fullCheck = CRM_Checkavailabletickets_BAO_EventHoldingTickets::isEventFull($form->_eventId);
-    if ($fullCheck) {
-      $event = civicrm_api3('Event', 'getsingle', ['id' => $form->_eventId]);
-      if (empty($event['has_waitlist'])) {
-        CRM_Core_Session::setStatus($event['event_full_text']);
-        CRM_Utils_System::redirect(CRM_Utils_System::url('civicrm/event/info', "reset=1&id={$form->_eventId}&holdingFull=1", FALSE, NULL, FALSE, TRUE));
+    $fromWaitlisting = $form->get('checkTicketsFromWaitlisting');
+    if (!$fromWaitlisting) {
+      $fullCheck = CRM_Checkavailabletickets_BAO_EventHoldingTickets::isEventFull($form->_eventId);
+      if ($fullCheck) {
+        $event = civicrm_api3('Event', 'getsingle', ['id' => $form->_eventId]);
+        if (empty($event['has_waitlist'])) {
+          CRM_Core_Session::setStatus($event['event_full_text']);
+          CRM_Utils_System::redirect(CRM_Utils_System::url('civicrm/event/info', "reset=1&id={$form->_eventId}&holdingFull=1", FALSE, NULL, FALSE, TRUE));
+        }
       }
     }
   }
@@ -225,18 +238,21 @@ function checkavailabletickets_civicrm_validateForm($formName, &$fields, &$files
  */
 function checkavailabletickets_civicrm_postProcess($formName, &$form) {
   if ($formName === 'CRM_Event_Form_Registration_Register') {
-    $submittedParams = $form->get('params')[0];
-    $submittedParticipantCount = CRM_Event_Form_Registration::getParticipantCount($form, $submittedParams);
-    $form->set('partCount', $submittedParticipantCount);
-    $fullCheck = CRM_Checkavailabletickets_BAO_EventHoldingTickets::isEventFull($form->_eventId, $submittedParticipantCount);
-    if ($fullCheck) {
-      $event = civicrm_api3('Event', 'getsingle', ['id' => $form->_eventId]);
-      if (empty($event['has_waitlist'])) {
-        CRM_Core_Session::setStatus($event['event_full_text']);
-        CRM_Utils_System::redirect(CRM_Utils_System::url('civicrm/event/info', "reset=1&id={$form->_eventId}&holdingFull=1", FALSE, NULL, FALSE, TRUE));
+    $fromWaitlisting = $form->get('checkTicketsFromWaitlisting');
+    if (!$fromWaitlisting) {
+      $submittedParams = $form->get('params')[0];
+      $submittedParticipantCount = CRM_Event_Form_Registration::getParticipantCount($form, $submittedParams);
+      $form->set('partCount', $submittedParticipantCount);
+      $fullCheck = CRM_Checkavailabletickets_BAO_EventHoldingTickets::isEventFull($form->_eventId, $submittedParticipantCount);
+      if ($fullCheck) {
+        $event = civicrm_api3('Event', 'getsingle', ['id' => $form->_eventId]);
+        if (empty($event['has_waitlist'])) {
+          CRM_Core_Session::setStatus($event['event_full_text']);
+          CRM_Utils_System::redirect(CRM_Utils_System::url('civicrm/event/info', "reset=1&id={$form->_eventId}&holdingFull=1", FALSE, NULL, FALSE, TRUE));
+        }
       }
+      CRM_Checkavailabletickets_BAO_EventHoldingTickets::updateHoldingTicketsCount($submittedParticipantCount, '+', $form->_eventId, $form->controller->_key);
     }
-    CRM_Checkavailabletickets_BAO_EventHoldingTickets::updateHoldingTicketsCount($submittedParticipantCount, '+', $form->_eventId, $form->controller->_key);
   }
 }
 
